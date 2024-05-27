@@ -46,4 +46,32 @@ app.post("/board", (req,res) => {
         "content":req.body.content
     };
     boardList.push(board);
+    res.send("글이 등록되었습니다");
 });
+
+app.delete("/board/:id", (req, res) => { 
+    //req.params.id 값 리스트 삭제
+    //찾는 요소 findItem에 넣기
+    const findItem = boardList.find((item) => {
+        return item.id == req.params.id
+    });
+    const idx = boardList.indexOf(findItem); //배열요소에 몇번째에 있는지
+    boardList.splice(idx, 1);
+    res.send("글이 삭제되었습니다");
+});
+
+app.put("/board/:id", (req, res) => {
+    const findItem = boardList.find((item) => {
+        return item.id == req.params.id
+    });
+    const idx = boardList.indexOf(findItem);
+    boardList.splice(idx, 1);
+    const board = {
+        "id":req.params.id,
+        "user_id":req.body.user_id,
+        "date":req.body.date,
+        "title":req.body.title,
+        "content":req.body.content
+    };
+    boardList.push(board);
+ });
