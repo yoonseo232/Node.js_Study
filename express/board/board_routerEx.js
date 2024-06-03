@@ -16,6 +16,10 @@ app.use(cors({
     credentials:true
 }));
 
+//npm install ejs
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views')
+
 // 포트 설정
 app.set('port', process.env.PORT || 8080 );
 
