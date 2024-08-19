@@ -8,12 +8,25 @@ async function getData(){
         }); //브라우저 확인
         const page = await brower.newPage(); //새창열기
         await page.goto('https://www.yes24.com/Product/Category/BestSeller?CategoryNumber=001&sumgb=06'); //페이지 이동
+
+        await Promise.all([
+            page.select("select#pg_size","120"),
+            page.waitForNavigation({waitUntil: "networkidle0", timeout:0})
+        ]);
         
         const bookList = await page.evaluate(() => {
             let books = [];
             let elements = document.querySelectorAll("#yesBestList > li");
             elements.forEach(elem => {
-                books.push(elem.querySelector("div.item_info > div.info_row.info_name > a.gd_name").innerText);
+                const book = {
+                    title: elem.querySelector("div.item_info > div.info_row.info_name > a.gd_name").innerText,
+                    rank: elem.querySelector(".ico.rank").innerText,
+                    img: elem.querySelector("em.img_bdr > img").getAttribute('src'),
+                    auth: elem.querySelector("div.item_info > div.info_row.info_pubGrp > span.info_auth").innerText,
+                    pub: elem.querySelector("div.item_info > div.info_row.info_pubGrp > span.info_pub").innerText,
+                    
+                }
+                books.push(book);
             });
             return books;
         });
